@@ -1,26 +1,31 @@
 package com.example.demo;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.example.demo.Collections.Person;
+import com.example.demo.Controllers.PersonController;
+import com.example.demo.Repositories.PersonRepository;
+import com.example.demo.Service.PersonService;
+import com.mongodb.assertions.Assertions;
+
+import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = PersonController.class)
@@ -59,11 +64,11 @@ public class PersonControllerTest {
                 .expectBody().isEmpty();
 
         verify(personService).insert(argumentCaptor.capture());
-        verify(repository, times(times)).save(any());
+        verify(repository, Mockito.times(times)).save(any());
 
         var person = argumentCaptor.getValue().block();
 
-        Assertions.assertEquals(name, person.getName());
+        Assertions.assertThat(person.getName()).isEqualTo(name);
 
     }
 

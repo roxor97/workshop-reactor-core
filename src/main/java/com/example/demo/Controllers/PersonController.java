@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.Controllers;
 
+import com.example.demo.Collections.Person;
+import com.example.demo.Service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -19,17 +21,17 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public Mono<Person> getPerson(@PathVariable("id") String id) {
-        return Mono.just(new Person());
+        return personService.findById(id);
     }
 
     @PutMapping
     public Mono<Void> update(@RequestBody Mono<Person> personMono) {
-        return Mono.empty();
+        return personService.update(personMono);
     }
 
     @DeleteMapping("/{id}")
     public Mono<Void> delete(@PathVariable("id") String id) {
-        return Mono.empty();
+        return personService.delete(id);
     }
 
     @GetMapping
